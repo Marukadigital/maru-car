@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AutoQR · Control de mantenimiento</title>
+  <link rel="stylesheet" href="autoqr.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand"><span class="brand-mark">⌁</span><strong>Auto<span>QR</span></strong></div>
+      <p class="eyebrow sidebar-label">Taller</p>
+      <nav class="nav">
+        <a class="nav-item active" href="#resumen">▦ <span>Resumen</span></a>
+        <a class="nav-item" href="#vehiculos">▣ <span>Vehículos</span></a>
+        <a class="nav-item" href="#clientes">♙ <span>Clientes</span></a>
+        <a class="nav-item" href="#actividad">⌁ <span>Actividad</span></a>
+      </nav>
+      <div class="sidebar-spacer"></div>
+      <div class="verified"><strong>◉ Taller verificado</strong><p>Los datos se guardan automáticamente en este navegador.</p></div>
+      <div class="profile"><span class="avatar">JD</span><div><strong>Administrador</strong><small>Panel del taller</small></div></div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <div><h1 id="page-title">Resumen</h1><p>Panel dinámico de mantenimiento</p></div>
+        <div class="top-actions"><button class="notification" type="button">◌<i></i></button><button class="button primary" type="button" data-open="vehicle-modal">＋ Nuevo vehículo</button></div>
+      </header>
+
+      <div class="content" id="resumen">
+        <section class="stats" id="stats"></section>
+        <section class="main-grid">
+          <article class="panel vehicles-panel" id="vehiculos">
+            <div class="section-heading"><div><p class="eyebrow">Seguimiento de flota</p><h2>Vehículos registrados</h2></div><button class="link-button" type="button" data-open="vehicle-modal">＋ Agregar</button></div>
+            <div class="vehicle-list" id="vehicle-list"></div>
+          </article>
+          <article class="panel activity-panel" id="actividad">
+            <div class="section-heading"><div><p class="eyebrow">Últimos movimientos</p><h2>Actividad reciente</h2></div><span class="muted">⌁</span></div>
+            <div class="activity-list" id="activity-list"></div>
+            <button class="button secondary full" type="button" data-open="service-modal">＋ Agregar mantenimiento</button>
+          </article>
+        </section>
+
+        <section class="panel promo"><span class="promo-icon">⌗</span><div><p class="eyebrow">La idea detrás de AutoQR</p><h2>Escaneá. Revisá. Volvé a la ruta.</h2><p>El cliente consulta la ficha de su vehículo escaneando el QR impreso en el llavero.</p></div><button class="button secondary" type="button" data-open="vehicle-modal">✦ Crear vehículo</button></section>
+
+        <section class="panel public-card" id="ficha-publica"><div class="public-copy"><p class="eyebrow">Ficha pública seleccionada</p><h2 id="public-plate">Sin vehículos</h2><p id="public-description">Cargá tu primer vehículo para generar su ficha.</p><span id="public-status" class="status next">QR pendiente</span><div class="public-stats"><div><small>KILOMETRAJE</small><strong id="public-km">0</strong><small>kilómetros</small></div><div><small>HISTORIAL</small><strong id="public-services">0</strong><small>registros</small></div></div></div><div class="qr-card" id="qr-card"><div class="qr-empty">⌗</div><small>El QR se genera al cargar un vehículo</small></div></section>
+
+        <section class="panel form-section" id="clientes"><div><p class="eyebrow">Datos del taller</p><h2>Cargá tus clientes y vehículos</h2><p class="form-help">Los datos quedan guardados automáticamente en este navegador. Podés exportar la información desde el botón de respaldo.</p></div><div class="form-actions"><button class="button primary" type="button" data-open="vehicle-modal">＋ Nuevo vehículo</button><button class="button secondary" id="export-data" type="button">↓ Exportar datos</button><button class="button secondary" id="clear-data" type="button">Limpiar demo</button></div></section>
+      </div>
+    </main>
+  </div>
+
+  <div class="modal" id="vehicle-modal" aria-hidden="true"><div class="modal-card"><button class="modal-close" type="button" data-close>×</button><p class="eyebrow">Alta de cliente y vehículo</p><h2>Agregar vehículo</h2><p class="form-help">El cliente quedará asociado al vehículo y tendrá una ficha pública con QR.</p><form id="vehicle-form" class="dynamic-form"><label>Nombre del cliente<input name="owner" required placeholder="Ej. Martín Rojas" /></label><label>Teléfono<input name="phone" placeholder="Ej. +54 9 11 5555 0192" /></label><div class="form-two"><label>Patente<input name="plate" required placeholder="AE 438 QZ" /></label><label>Año<input name="year" required type="number" min="1950" max="2100" placeholder="2021" /></label></div><div class="form-two"><label>Marca<input name="make" required placeholder="Toyota" /></label><label>Modelo<input name="model" required placeholder="Corolla XEI" /></label></div><label>Kilometraje actual<input name="km" required type="number" min="0" placeholder="68420" /></label><button class="button primary" type="submit">Guardar vehículo y generar QR</button></form></div></div>
+
+  <div class="modal" id="service-modal" aria-hidden="true"><div class="modal-card"><button class="modal-close" type="button" data-close>×</button><p class="eyebrow">Bitácora del taller</p><h2>Agregar mantenimiento</h2><p class="form-help">El registro aparecerá en el dashboard y en la ficha pública del vehículo.</p><form id="service-form" class="dynamic-form"><label>Vehículo<select name="vehicleId" id="service-vehicle" required></select></label><label>Tipo<select name="type"><option>Reparación</option><option>Aceite</option><option>Neumáticos</option><option>Combustible</option></select></label><label>Descripción<input name="title" required placeholder="Ej. Cambio de aceite y filtro" /></label><div class="form-two"><label>Kilometraje<input name="km" required type="number" min="0" placeholder="68420" /></label><label>Costo<input name="cost" type="number" min="0" placeholder="89500" /></label></div><label>Detalle / observaciones<textarea name="detail" rows="3" placeholder="Cantidad, marca, presión o notas del servicio"></textarea></label><button class="button primary" type="submit">Guardar mantenimiento</button></form></div></div>
+
+<script>
+(function () {
+  const STORAGE = 'autoqr-data-v2';
+  const seed = { vehicles: [{ id:'v1', token:'autoqr-7K4M2', plate:'AE 438 QZ', make:'Toyota', model:'Corolla XEI', year:2021, km:68420, owner:'Martín Rojas', phone:'+54 9 11 5555 0192', status:'próximo', next:'Cambio de aceite', nextDue:'En 580 km' }, { id:'v2', token:'autoqr-3P8N1', plate:'AF 920 VK', make:'Volkswagen', model:'Amarok V6', year:2022, km:45210, owner:'Sofía Álvarez', phone:'+54 9 11 4444 8210', status:'al día', next:'Control general', nextDue:'En 4.790 km' }], services: [{ id:'s1', vehicleId:'v1', type:'Aceite', title:'Cambio de aceite y filtro', detail:'Sintético 5W-30 · 4,2 L', date:'18 nov 2026', km:67840, cost:89500 }, { id:'s2', vehicleId:'v2', type:'Reparación', title:'Pastillas de freno delanteras', detail:'Juego Bosch · mano de obra incluida', date:'15 nov 2026', km:45210, cost:184000 }] };
+  let data = JSON.parse(localStorage.getItem(STORAGE) || 'null') || seed;
+  const $ = (selector) => document.querySelector(selector);
+  const money = (value) => value ? new Intl.NumberFormat('es-AR',{style:'currency',currency:'ARS',maximumFractionDigits:0}).format(value) : 'A confirmar';
+  const esc = (value) => String(value ?? '').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[char]));
+  const save = () => localStorage.setItem(STORAGE, JSON.stringify(data));
+  const token = () => 'autoqr-' + Math.random().toString(36).slice(2, 8).toUpperCase();
+  const statusClass = (status) => status === 'atención' ? 'alert' : status === 'al día' ? 'ok' : 'next';
+  const statusText = (status) => status === 'atención' ? '! Atención' : status === 'al día' ? '◉ Al día' : '◷ Próximo';
+  function render() {
+    save();
+    const active = data.vehicles.length;
+    const due = data.vehicles.filter(v => v.status !== 'al día').length;
+    $('#stats').innerHTML = `<article class="panel stat"><span class="stat-icon teal">▣</span><p class="eyebrow">Vehículos activos</p><strong>${String(active).padStart(2,'0')}</strong><small>Clientes con vehículo cargado</small></article><article class="panel stat"><span class="stat-icon violet">⚒</span><p class="eyebrow">Servicios registrados</p><strong>${String(data.services.length).padStart(2,'0')}</strong><small>Historial completo del taller</small></article><article class="panel stat"><span class="stat-icon amber">◷</span><p class="eyebrow">Próximos controles</p><strong>${String(due).padStart(2,'0')}</strong><small>Requieren seguimiento</small></article><article class="panel stat"><span class="stat-icon blue">⌁</span><p class="eyebrow">Clientes</p><strong>${new Set(data.vehicles.map(v=>v.owner)).size.toString().padStart(2,'0')}</strong><small>Personas registradas</small></article>`;
+    $('#vehicle-list').innerHTML = data.vehicles.length ? data.vehicles.map(v => `<button class="vehicle-row" data-select="${v.id}" type="button"><span class="vehicle-dot ${v.status === 'atención' ? 'red' : v.status === 'próximo' ? 'teal' : 'amber'}">▣</span><div class="vehicle-name"><div><strong>${esc(v.plate)}</strong><span class="status ${statusClass(v.status)}">${statusText(v.status)}</span></div><small>${esc(v.make)} ${esc(v.model)} · ${v.year} · ${esc(v.owner)}</small></div><div class="vehicle-data"><small>KILOMETRAJE</small><strong>${Number(v.km).toLocaleString('es-AR')} km</strong></div><div class="vehicle-data next-control"><small>PRÓXIMO CONTROL</small><strong>${esc(v.next || 'Control general')}</strong><small>${esc(v.nextDue || 'A confirmar')}</small></div><span class="qr-mini">⌗ QR</span><span class="arrow">›</span></button>`).join('') : '<div class="empty-state">Todavía no hay vehículos. Usá “Nuevo vehículo” para comenzar.</div>';
+    $('#activity-list').innerHTML = data.services.length ? data.services.slice().reverse().slice(0,6).map(s => { const v = data.vehicles.find(item => item.id === s.vehicleId); return `<div class="activity-row"><span class="service-icon ${s.type === 'Aceite' ? 'oil' : s.type === 'Combustible' ? 'fuel' : s.type === 'Neumáticos' ? 'tire' : 'repair'}">${s.type === 'Combustible' ? '⛽' : s.type === 'Aceite' ? '♨' : s.type === 'Neumáticos' ? '◉' : '⚒'}</span><div><strong>${esc(s.title)}</strong><small>${esc(v ? v.plate : 'Vehículo eliminado')} · ${esc(s.date)}</small></div><b>${money(s.cost)}</b></div>`; }).join('') : '<div class="empty-state">Todavía no hay mantenimientos registrados.</div>';
+    const selected = data.vehicles[0];
+    if (selected) { const count = data.services.filter(s => s.vehicleId === selected.id).length; $('#public-plate').textContent = selected.plate; $('#public-description').textContent = `${selected.make} ${selected.model} · ${selected.year} · ${selected.owner}`; $('#public-status').className = 'status ' + statusClass(selected.status); $('#public-status').textContent = statusText(selected.status) + ' · ' + (selected.next || 'Control general'); $('#public-km').textContent = Number(selected.km).toLocaleString('es-AR'); $('#public-services').textContent = String(count).padStart(2,'0'); $('#qr-card').innerHTML = `<img alt="Código QR de ${esc(selected.plate)}" src="https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodeURIComponent(location.href.split('#')[0] + '#vehiculo=' + selected.token)}" /><small>QR listo para imprimir en el llavero</small>`; } else { $('#public-plate').textContent='Sin vehículos'; $('#public-description').textContent='Cargá tu primer vehículo para generar su ficha.'; $('#qr-card').innerHTML='<div class="qr-empty">⌗</div><small>El QR se genera al cargar un vehículo</small>'; }
+    $('#service-vehicle').innerHTML = data.vehicles.map(v => `<option value="${v.id}">${esc(v.plate)} · ${esc(v.make)} ${esc(v.model)}</option>`).join('');
+    document.querySelectorAll('[data-select]').forEach(button => button.addEventListener('click', () => selectVehicle(button.dataset.select)));
+  }
+  function selectVehicle(id) { const v = data.vehicles.find(item => item.id === id); if (!v) return; const count = data.services.filter(s => s.vehicleId === v.id).length; $('#public-plate').textContent = v.plate; $('#public-description').textContent = `${v.make} ${v.model} · ${v.year} · ${v.owner}`; $('#public-status').className = 'status ' + statusClass(v.status); $('#public-status').textContent = statusText(v.status) + ' · ' + (v.next || 'Control general'); $('#public-km').textContent = Number(v.km).toLocaleString('es-AR'); $('#public-services').textContent = String(count).padStart(2,'0'); $('#qr-card').innerHTML = `<img alt="Código QR de ${esc(v.plate)}" src="https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodeURIComponent(location.href.split('#')[0] + '#vehiculo=' + v.token)}" /><small>QR listo para imprimir en el llavero</small>`; location.hash='ficha-publica'; }
+  function openModal(id) { const modal = $('#'+id); if (modal) { modal.classList.add('open'); modal.setAttribute('aria-hidden','false'); } }
+  function closeModal(modal) { modal.classList.remove('open'); modal.setAttribute('aria-hidden','true'); }
+  document.querySelectorAll('[data-open]').forEach(button => button.addEventListener('click', () => openModal(button.dataset.open)));
+  document.querySelectorAll('[data-close]').forEach(button => button.addEventListener('click', () => closeModal(button.closest('.modal'))));
+  document.querySelectorAll('.modal').forEach(modal => modal.addEventListener('click', event => { if (event.target === modal) closeModal(modal); }));
+  $('#vehicle-form').addEventListener('submit', event => { event.preventDefault(); const form = new FormData(event.target); const id='v-'+Date.now(); data.vehicles.push({id, token:token(), plate:form.get('plate'), make:form.get('make'), model:form.get('model'), year:Number(form.get('year')), km:Number(form.get('km')), owner:form.get('owner'), phone:form.get('phone'), status:'al día', next:'Control general', nextDue:'A confirmar'}); render(); event.target.reset(); closeModal($('#vehicle-modal')); selectVehicle(id); });
+  $('#service-form').addEventListener('submit', event => { event.preventDefault(); const form = new FormData(event.target); data.services.push({id:'s-'+Date.now(), vehicleId:form.get('vehicleId'), type:form.get('type'), title:form.get('title'), detail:form.get('detail') || 'Registro cargado por el taller', date:'Hoy', km:Number(form.get('km')), cost:Number(form.get('cost') || 0)}); render(); event.target.reset(); closeModal($('#service-modal')); });
+  $('#export-data').addEventListener('click', () => { const file = new Blob([JSON.stringify(data,null,2)], {type:'application/json'}); const link=document.createElement('a'); link.href=URL.createObjectURL(file); link.download='autoqr-respaldo.json'; link.click(); URL.revokeObjectURL(link.href); });
+  $('#clear-data').addEventListener('click', () => { if(confirm('¿Querés borrar los datos guardados y volver al ejemplo?')) { data=JSON.parse(JSON.stringify(seed)); render(); } });
+  render();
+})();
+</script>
+</body>
+</html>
